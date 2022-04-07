@@ -1,0 +1,16 @@
+// Subir imagenes
+npm i express-fileupload
+
+// Crear y manipular archivos
+npm i fs-extra
+
+// Enviar mensajes de error al cliente 
+npm i http-errros 
+
+// Para subir imagenes al servicio cloudinary
+npm i cloudinary
+
+// Intalaciones módulos
+npm i express express-fileupload mongoose dotenv fs-extra http-errors morgan 
+
+npm i nodemon -D
