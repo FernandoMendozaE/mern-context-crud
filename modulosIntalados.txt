@@ -6,7 +6,7 @@ npm i express-fileupload
 npm i fs-extra
 
 // Enviar mensajes de error al cliente 
-npm i http-errros 
+npm i http-errors 
 
 // Para subir imagenes al servicio cloudinary
 npm i cloudinary

@@ -16,7 +16,6 @@ export function PostCard({ post }) {
       t => (
         <div>
           <p className="text-white">
-            {console.log(post)}
             Do you want to delete <strong>{post.title}</strong>?
           </p>
           <div className="flex justify-center py-2">

@@ -1,12 +1,22 @@
 import Post from '../model/Post.js'
 import { uploadImage, deleteImage } from '../libs/cloudinary.js' // ! importando sus funciones de cloudinary
-import fs from 'fs-extra' // ! importando librería fs-extra
 
 // * GET /posts
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-    res.send(posts)
+    res.json(posts)
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+// * GET /posts/:id
+export const getPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+    if (!post) return res.sendStatus(404)
+    return res.json(post)
   } catch (error) {
     return res.status(500).json({ message: error.message })
   }
@@ -18,23 +28,13 @@ export const createPost = async (req, res) => {
     const { title, description } = req.body
     // req.files // ? files: nos permite acceder a los archivos que se subieron
 
-    let image
-    // * subiendo la imagen a cloudinary
-    if (req.files?.image) {
-      const result = await uploadImage(req.files.image.tempFilePath)
-      await fs.remove(req.files.image.tempFilePath) // ? eliminando el archivo temporal
-      image = {
-        url: result.secure_url,
-        public_id: result.public_id
-      }
-    }
+    const image = await uploadImage(req.files?.image)
 
     const newPost = new Post({ title, description, image })
     await newPost.save()
 
     res.json(newPost)
   } catch (error) {
-    console.log(error)
     return res.status(500).json({ message: error.message })
   }
 }
@@ -42,7 +42,23 @@ export const createPost = async (req, res) => {
 // * PUT /posts/:id
 export const updatePost = async (req, res) => {
   try {
-    const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    const { id } = req.params
+
+    const postUpdate = await Post.findById(id)
+    let imageUpdate = null
+    if (postUpdate) {
+      const { image } = postUpdate
+      if (image.public_id) await deleteImage(image.public_id) // ? eliminando la imagen anterior
+      imageUpdate = await uploadImage(req.files?.image) // ? subiendo la nueva imagen
+    }
+
+    const post = await Post.findByIdAndUpdate(
+      id,
+      { $set: { ...req.body, image: imageUpdate } },
+      {
+        new: true
+      }
+    )
     return res.json(post)
   } catch (error) {
     return res.status(500).json({ message: error.message })
@@ -62,17 +78,6 @@ export const deletePost = async (req, res) => {
     }
 
     return res.sendStatus(204)
-  } catch (error) {
-    return res.status(500).json({ message: error.message })
-  }
-}
-
-// * GET /posts/:id
-export const getPost = async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id)
-    if (!post) return res.sendStatus(404)
-    return res.json(post)
   } catch (error) {
     return res.status(500).json({ message: error.message })
   }
