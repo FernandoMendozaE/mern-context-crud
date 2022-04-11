@@ -99,8 +99,6 @@ export function PostForm() {
               >
                 {isSubmitting ? (
                   <AiOutlineLoading3Quarters className="animate-spin h-5 w-5" />
-                ) : params.id ? (
-                  'Update'
                 ) : (
                   'Save'
                 )}
