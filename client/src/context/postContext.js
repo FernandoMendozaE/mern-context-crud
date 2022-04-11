@@ -11,17 +11,23 @@ import {
 const postContext = createContext()
 
 // * Creando un hook que permite acceder al contexto el cual se exporta
-export const usePosts = () => useContext(postContext)
+export const usePosts = () => {
+  const context = useContext(postContext)
+  if (!context) throw new Error('Post Provider is missing')
+  return context
+}
 
 export const PostProvider = ({ children }) => {
   // * Creando state
   const [posts, setPosts] = useState([])
 
-  // * Función que permite obtener los posts
-  const getPosts = async () => {
-    const res = await getPostsRequest()
-    setPosts(res.data)
-  }
+  // * Hook que permite ejecutar la función getPosts, al cargar el componente por primera vez y cada vez que se actualice el state
+  useEffect(() => {
+    ;(async () => {
+      const res = await getPostsRequest()
+      setPosts(res.data)
+    })()
+  }, [])
 
   // * Función que permite agregar un post
   const createPost = async post => {
@@ -29,7 +35,7 @@ export const PostProvider = ({ children }) => {
       const res = await createPostRequest(post)
       setPosts([...posts, res.data])
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -43,29 +49,29 @@ export const PostProvider = ({ children }) => {
 
   // * Función que permite obtener un post
   const getPost = async id => {
-    const res = await getPostRequest(id)
-    return res.data
+    try {
+      const res = await getPostRequest(id)
+      return res.data
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   // * Función que permite actualizar un post
   const updatePost = async (id, post) => {
-    const res = await updatePostRequest(id, post)
-    if (res.status === 200) {
+    try {
+      const res = await updatePostRequest(id, post)
       setPosts(posts.map(post => (post._id === id ? res.data : post)))
+    } catch (error) {
+      console.error(error)
     }
   }
-
-  // * Hook que permite ejecutar la función getPosts, al cargar el componente por primera vez y cada vez que se actualice el state
-  useEffect(() => {
-    getPosts()
-  }, [])
 
   // ? postContext.Provider: es el contenedor de los datos, los componentes hijos pueden acceder a ellos
   return (
     <postContext.Provider
       value={{
         posts,
-        getPosts,
         createPost,
         deletePost,
         getPost,

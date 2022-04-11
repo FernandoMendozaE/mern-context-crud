@@ -17,7 +17,7 @@ export function PostCard({ post }) {
         <div>
           <p className="text-white">
             {console.log(post)}
-            Do you want to delete? <strong>{post.title}</strong>
+            Do you want to delete <strong>{post.title}</strong>?
           </p>
           <div className="flex justify-center py-2">
             <button
@@ -51,12 +51,12 @@ export function PostCard({ post }) {
 
   return (
     <div
-      className="bg-zinc-800 text-white rounded-sm shadow-md shadow-black hover:bg-zinc-700 hover:cursor-pointer"
+      className="bg-zinc-800 text-white rounded-md shadow-md shadow-black hover:bg-zinc-700 hover:cursor-pointer"
       onClick={() => navigate(`/posts/${post._id}`)}
     >
       <div className="px-4 py-7">
-        <div className="flex justify-between">
-          <h3>{post.title}</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-semibold">{post.title}</h3>
           <button
             className="bg-red-600 hover:bg-red-500 text-sm px-2 py-1 rounded-sm"
             onClick={e => {
@@ -67,7 +67,7 @@ export function PostCard({ post }) {
             Delete
           </button>
         </div>
-        <p>{post.description}</p>
+        <p className="text-gray-400">{post.description}</p>
       </div>
       {post.image && <img src={post.image.url} alt="" className="object-cover h-96 w-full" />}
     </div>

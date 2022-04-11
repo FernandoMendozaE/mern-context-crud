@@ -29,7 +29,7 @@ export function PostForm() {
     <div className="flex items-center justify-center">
       <div className="bg-zinc-800 p-10 shadow-md shadow-black">
         <header className="flex justify-between items-center py-4 text-white">
-          <h3 className="text-xl">New Post</h3>
+          <h3 className="text-xl">{params.id ? 'Update' : 'New'} Post</h3>
           <Link to="/" className="text-gray-400 text-sm hover:text-gray-300">
             Go Back
           </Link>
@@ -57,7 +57,7 @@ export function PostForm() {
         >
           {({ handleSubmit, setFieldValue, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
-              <label htmlFor="title" className="text-sm block font-bold text-gray-400">
+              <label htmlFor="title" className="text-sm block font-bold mb-2 text-gray-400">
                 Title
               </label>
               {/* ? Field: es el componente que permite crear un input 
@@ -65,30 +65,30 @@ export function PostForm() {
             */}
               <Field
                 name="title"
-                placeholder="title"
+                placeholder="Post title"
                 className="px-3 py-2 focus:outline-none rounded bg-gray-600 text-white w-full mb-4"
               />
               <ErrorMessage className="text-red-400 text-sm" name="title" component="p" />
 
-              <label htmlFor="title" className="text-sm block font-bold text-gray-400">
+              <label htmlFor="title" className="text-sm block font-bold mb-2 text-gray-400">
                 Description
               </label>
               <Field
                 component="textarea"
                 name="description"
-                placeholder="description"
+                placeholder="Write a description"
                 className="px-3 py-2 focus:outline-none rounded bg-gray-600 text-white w-full"
                 rows={3}
               />
               <ErrorMessage className="text-red-400 text-sm" name="description" component="p" />
 
-              <label htmlFor="title" className="text-sm block font-bold text-gray-400">
-                Description
+              <label htmlFor="image" className="text-sm block font-bold mb-2 text-gray-400">
+                Image
               </label>
               <input
                 type="file"
                 name="image"
-                className="px-3 py-2 focus:outline-none rounded bg-gray-600 text-white w-full"
+                className="px-3 py-2 focus:outline-none rounded bg-gray-600 text-white w-full mb-4"
                 onChange={e => setFieldValue('image', e.target.files[0])}
               />
 
@@ -99,6 +99,8 @@ export function PostForm() {
               >
                 {isSubmitting ? (
                   <AiOutlineLoading3Quarters className="animate-spin h-5 w-5" />
+                ) : params.id ? (
+                  'Update'
                 ) : (
                   'Save'
                 )}

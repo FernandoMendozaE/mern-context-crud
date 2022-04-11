@@ -6,28 +6,36 @@ import { PostCard } from '../components/PostCard' // ! importando el componente 
 export function HomePage() {
   const { posts } = usePosts() // ? usando el hook
 
-  if (posts.length === 0)
+  // * Renderizando el componente PostCard con condicional
+  const renderPost = () => {
+    if (posts.length === 0)
+      return (
+        <div className="flex flex-col justify-center items-center">
+          <VscEmptyWindow className="w-48 h-48 text-white" />
+          <h1 className="text-white text-2xl">There are no posts</h1>
+        </div>
+      )
     return (
-      <div className="flex flex-col justify-center items-center">
-        <VscEmptyWindow className="w-48 h-48 text-white" />
-        <h1 className="text-white text-2xl">There are no posts</h1>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {posts.map(post => (
+          <PostCard key={post._id} post={post} />
+        ))}
       </div>
     )
+  }
+
   return (
-    <div className="text-white">
-      <header className="flex justify-between py-4">
+    <main>
+      <header className="flex justify-between items-center py-4">
         <h1 className="text-2xl text-gray-300 font-bold">Posts ({posts.length})</h1>
-        <Link to="/new" className="px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white">
+        <Link to="/new" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white">
           {' '}
           Create New Post
         </Link>
       </header>
 
-      <div className="grid grid-cols-3 gap-4">
-        {posts.map(post => (
-          <PostCard key={post._id} post={post} />
-        ))}
-      </div>
-    </div>
+      {/* // ? Renderizando el componente PostCard con condicional */}
+      {renderPost()}
+    </main>
   )
 }
