@@ -22,8 +22,12 @@ app.use(
 // * routes
 app.use('/api', postsRoutes) // ? usando las rutas
 
-// * static files
+// * Configuraciones para que express entienda archivos estáticos para desplegar en producción
 const __dirname = dirname(fileURLToPath(import.meta.url)) // ? obteniendo el directorio del archivo
 app.use(express.static(join(__dirname, '../client/build'))) // ? usando el directorio publico para que express entienda los archivos estaticos
+
+app.get('*', (req, res) => {
+  res.sendFile(join(__dirname, '../client/build/index.html')) // ? enviando el index.html para que express entienda los archivos estaticos
+})
 
 export default app
