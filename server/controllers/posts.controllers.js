@@ -20,7 +20,7 @@ export const createPost = async (req, res) => {
 
     let image
     // * subiendo la imagen a cloudinary
-    if (req.files.image) {
+    if (req.files?.image) {
       const result = await uploadImage(req.files.image.tempFilePath)
       await fs.remove(req.files.image.tempFilePath) // ? eliminando el archivo temporal
       image = {

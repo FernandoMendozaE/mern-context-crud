@@ -1,3 +1,4 @@
+=========== BACKEND ==================
 // Subir imagenes
 npm i express-fileupload
 
@@ -14,3 +15,9 @@ npm i cloudinary
 npm i express express-fileupload mongoose dotenv fs-extra http-errors morgan 
 
 npm i nodemon -D
+
+============== FRONTEND =================
+npm i react-router-dom react-hot-toast react-icons axios formik yup 
+
+// formik => recibir el estado, mensajes de errores
+// yup => validar formularios (string, int)
