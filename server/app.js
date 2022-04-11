@@ -2,6 +2,8 @@ import express from 'express' // ! importando express
 import postsRoutes from './routes/posts.routes.js' // ! importando las rutas
 import fileUpload from 'express-fileupload' // ! importando módulo fileUpload
 import morgan from 'morgan' // ! importando módulo morgan
+import { dirname, join } from 'path' // ! importando módulo path
+import { fileURLToPath } from 'url' // ! importando módulo url
 
 const app = express() // ? creando una instancia de express
 
@@ -19,5 +21,9 @@ app.use(
 
 // * routes
 app.use('/api', postsRoutes) // ? usando las rutas
+
+// * static files
+const __dirname = dirname(fileURLToPath(import.meta.url)) // ? obteniendo el directorio del archivo
+app.use(express.static(join(__dirname, '../client/build'))) // ? usando el directorio publico para que express entienda los archivos estaticos
 
 export default app
